@@ -8,6 +8,7 @@ This app uses Python3, PostgreSQL.
 4. run application with `python manage.py runserver` to start on port 8000 by default, or `python manage.py runserver 5000` to choose port 5000.
 
 You can access endpoints at:
+
     - `localhost:8000/api/get_list_of_doctors` (GET)
     - `localhost:8000/api/get_appointments_by_doc/:pk` (GET). pk will be the ID of the doctor. For example: `localhost:8000/api/get_appointments_by_doc/1` to get Michelle's appointments.
     - `localhost:8000/api/add_appt_for_doc` (POST). Include this type of body:
