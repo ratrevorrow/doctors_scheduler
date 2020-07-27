@@ -40,9 +40,9 @@ appointments = {
 
 You can access endpoints at:
 
-    - `localhost:8000/api/get_list_of_doctors` (GET)
-    - `localhost:8000/api/get_appointments_by_doc/:pk` (GET). pk will be the ID of the doctor. For example: `localhost:8000/api/get_appointments_by_doc/1` to get Michelle's appointments.
-    - `localhost:8000/api/add_appt_for_doc` (POST). Include this type of body:
+- `localhost:8000/api/get_list_of_doctors` (GET)
+- `localhost:8000/api/get_appointments_by_doc/:pk` (GET). pk will be the ID of the doctor. For example: `localhost:8000/api/get_appointments_by_doc/1` to get Michelle's appointments.
+- `localhost:8000/api/add_appt_for_doc` (POST). Include this type of body:
     ```json
     {
         "name": "Michelle",
@@ -55,7 +55,7 @@ You can access endpoints at:
         }
     }
     ```
-    - `localhost:8000/api/delete_appt_for_doc` (DELETE). name key is the doctors first name, pk is the appointment ID. Include this type of body in the request:
+- `localhost:8000/api/delete_appt_for_doc` (DELETE). name key is the doctors first name, pk is the appointment ID. Include this type of body in the request:
     ```json
     {
         {
