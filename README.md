@@ -58,9 +58,7 @@ You can access endpoints at:
 - `localhost:8000/api/delete_appt_for_doc` (DELETE). name key is the doctors first name, pk is the appointment ID. Include this type of body in the request:
     ```json
     {
-        {
-            "name": "Michelle",
-            "pk": 1
-        }
+        "name": "Michelle",
+        "pk": 1
     }
     ```
