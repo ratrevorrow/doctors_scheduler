@@ -1,7 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
-from .services import *
+from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT,
+                                   HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND)
+from .services import *                                   
 
 ####################### GET REQUESTS ####################### 2
 @api_view(["GET"])
@@ -42,7 +44,16 @@ def add_appt_for_doc(request):
         [type]: [description]
     """
     data = JSONParser().parse(request)
-    return Response(status=add_appt(data['name'], data['appt']))
+    date_time = data['appt']['date_time'].split(' ')
+    date = date_time[0]
+    time = date_time[1]
+    # check to see if the time asked for is spaced 15 minutes out
+    if int(time.split(':')[1]) % 15 != 0:
+        return Response(data="Times have to be in 15 minute increments", status=HTTP_400_BAD_REQUEST)
+    status = add_appt(data['name'], data['appt'])
+    if status == HTTP_400_BAD_REQUEST:
+        return Response(data="There are 3 appointments for this time slot already", status=status)
+    return Response(status=status)
 
 ####################### DELETE REQUESTS ####################### 1
 @api_view(["DELETE"])

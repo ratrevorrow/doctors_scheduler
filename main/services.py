@@ -2,11 +2,6 @@ from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CO
                                    HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND)
 from .models import *
 import datetime
-data_arr = []
-data_obj = {}
-# obj = Object.objects.get(pk=pk) 
-# obj = MainFile.objects.get(file_id='e3e978a3-0375-4bb9-85a2-5175e2ec097d')
-
 # Doctors should
 # have a unique ID, a first name, and a last name
 doctors = [{
@@ -24,7 +19,8 @@ appointment = {
     'id': 1,
     'first_name': 'richard',
     'last_name': 'trevorrow',
-    'date_time': datetime.datetime.now(),
+    # 'date_time': datetime.datetime.now(),
+    'date_time': "25/07/2020 08:30:00",
     'kind': 'NP'
 }
 appointments = {
@@ -45,13 +41,14 @@ def get_appts_for_doc(pk):
 
 
 ####################### POST REQUESTS ####################### 1
-def add_appt(name, appt):
-    date_time = appt['date_time'].split(' ')
-    date = date_time[0]
-    time = date_time[1]
-    # check to see if the time asked for is spaced 15 minutes out
-    if int(time.split(':')[1]) % 15 != 0:
-        return Response(data="Times have to be in 15 minute increments", status=HTTP_400_BAD_REQUEST)
+def add_appt(name, new_appt):
+    appts = appointments[name]
+    count = 0
+    for appt in appts:
+        if appt['date_time'] == new_appt['date_time']:
+            count += 1
+    if count == 3:
+        return HTTP_400_BAD_REQUEST
     appointments[name].append(appt)
     return HTTP_201_CREATED
 
