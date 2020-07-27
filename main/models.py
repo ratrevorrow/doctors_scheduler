@@ -16,8 +16,8 @@ class Appointment(models.Model):
     last_name = models.TextField()
     date = models.DateTimeField()
     KIND = (
-        ('NP', 'New Patient'),
-        ('FUP', 'Follow-up')
+        ('NEW_PATIENT', 'New Patient'),
+        ('FOLLOW_UP', 'Follow-up')
     )
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     

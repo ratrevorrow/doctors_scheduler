@@ -31,6 +31,7 @@ appointment = {
     'date_time': "25/07/2020 08:30:00",
     'kind': 'New Patient'
 }
+
 appointments = {
     'Andy': [appointment],
     'Michelle': [appointment]

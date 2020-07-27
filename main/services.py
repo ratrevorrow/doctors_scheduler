@@ -1,7 +1,7 @@
 from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT,
                                    HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND)
 from .models import *
-import datetime
+
 # Doctors should
 # have a unique ID, a first name, and a last name
 doctors = [{
@@ -19,10 +19,10 @@ appointment = {
     'id': 1,
     'first_name': 'richard',
     'last_name': 'trevorrow',
-    # 'date_time': datetime.datetime.now(),
     'date_time': "25/07/2020 08:30:00",
-    'kind': 'NP'
+    'kind': 'New Patient'
 }
+
 appointments = {
     'Andy': [appointment],
     'Michelle': [appointment]
@@ -49,7 +49,7 @@ def add_appt(name, new_appt):
             count += 1
     if count == 3:
         return HTTP_400_BAD_REQUEST
-    appointments[name].append(appt)
+    appointments[name].append(new_appt)
     return HTTP_201_CREATED
 
 ####################### DELETE REQUESTS ####################### 1
