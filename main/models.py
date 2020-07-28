@@ -1,25 +1,24 @@
 from django.db import models
 
 # Create your models here.
-
 class Doctor(models.Model):
     first_name = models.TextField()
     last_name = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.first_name + last_name
+        return str(self.first_name) + " " + str(self.last_name)
 
-# patient first name, patient last name, date & time, and kind (New Patient or Follow-up).
 class Appointment(models.Model):
     first_name = models.TextField()
     last_name = models.TextField()
     date = models.DateTimeField()
     KIND = (
-        ('NEW_PATIENT', 'New Patient'),
-        ('FOLLOW_UP', 'Follow-up')
+        ('N', 'New Patient'),
+        ('F', 'Follow-up')
     )
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    kind = models.CharField(max_length=1, choices=KIND, blank=True, null=True)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, default=1)
     
     def __str__(self):
-        return self.first_name + last_name
+        return str(self.first_name) + " " + str(self.last_name)

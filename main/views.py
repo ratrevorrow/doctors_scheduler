@@ -29,6 +29,18 @@ def get_appointments_by_doc(request, pk):
     res, status = get_appts_for_doc(pk)
     return Response(res, status=status)
 
+@api_view(["GET"])
+def get_all_appts(request):
+    """Get a list of all appointments for a particular doctor and particular day
+
+    Args:
+        pk (int): this will be the ID of the doctor
+
+    Returns:
+        Response: Returns the list of appointments for the specific doctor.
+    """
+    return Response(get_appts(), status=HTTP_200_OK)
+
 ####################### POST REQUESTS ####################### 1
 @api_view(["POST"])
 def add_appt_for_doc(request):
@@ -43,31 +55,29 @@ def add_appt_for_doc(request):
         Response 201:   if the appointment was added to the doctor successfully
     """
     data = JSONParser().parse(request)
-    date_time = data['appt']['date_time'].split(' ')
-    date = date_time[0]
-    time = date_time[1]
-    # check to see if the time asked for is spaced 15 minutes out
-    if int(time.split(':')[1]) % 15 != 0:
-        return Response(data="Times have to be in 15 minute increments", status=HTTP_400_BAD_REQUEST)
-    status = add_appt(data['name'], data['appt'])
-    if status == HTTP_400_BAD_REQUEST:
-        return Response(data="There are 3 appointments for this time slot already", status=status)
-    return Response(status=status)
+    res, status = add_appt(data)
+    return Response(data=res, status=status)
+
+@api_view(["POST"])
+def add_doctor(request):
+    data = JSONParser().parse(request)
+    return Response(status=add_doc(data))
+
+@api_view(["POST"])
+def get_avail_times(request):
+    data = JSONParser().parse(request)
+    res, status = get_times_available_for_date(data)
+    return Response(res, status=status)
 
 ####################### DELETE REQUESTS ####################### 1
 @api_view(["DELETE"])
-def delete_appt_for_doc(request):
+def delete_appt_for_doc(request, pk):
     """Delete an existing appointment from a doctor's calendar
 
     Args:
-        request will be parsed using JSONParser. 
-        It should contain keys: name, pk (the ID of the appointment)
+        pk: the ID of the appointment
 
     Returns:
-        Response 404:   if the appointment was not found
         Response 204:   if the appointment was deleted successfully
     """
-    data = JSONParser().parse(request)
-    status = delete_appt(data['name'], data['pk'])
-    return Response(status=status)
-
+    return Response(status=delete_appt(pk))
