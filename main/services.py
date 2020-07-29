@@ -10,7 +10,7 @@ from .serializers import AppointmentSerializer, DoctorSerializer
 import datetime
 
 timezone.now()
-DATE_FORMAT_1 = '%Y-%m-%dT%H:%M:%SZ'
+DATE_FORMAT_1 = '%Y-%m-%dT%H:%M:%S'
 DATE_FORMAT_2 = '%Y-%m-%d %H:%M:%S'
 time_slots = {}
 
@@ -24,17 +24,14 @@ def get_appts_for_doc(pk):
 def get_appts():
     return __get_items(Appointment.objects.all())
 
-def get_times_available_for_date(data):
-    # __init_time_slots()
-    # date = datetime.datetime.strptime(data['date'], '%Y-%m-%d')
-    # items = __get_items(Appointment.objects.filter(date__date=date))
-    # print(time_slots)
-    # for item in items:
-    #     datetime_appt = datetime.datetime.strptime(item['fields']['date'], DATE_FORMAT)
-    #     print(time_slots[datetime_appt.time()])
-    #     # time_slots[datetime_appt.time()] -= 1
-    # return time_slots, HTTP_200_OK
-    return None, HTTP_200_OK
+def get_times_available_for_date(pk, date):
+    __init_time_slots()
+    date = datetime.datetime.strptime(date, '%Y-%m-%d')
+    items = __get_items(Appointment.objects.filter(date__date=date))
+    for item in items:
+        date_time = datetime.datetime.strptime(item['fields']['date'], DATE_FORMAT_1)
+        time_slots[str(date_time.time())] -= 1
+    return time_slots
 
 ####################### POST REQUESTS #######################
 def add_appt(new_appt):
@@ -63,8 +60,15 @@ def __get_items(queryset):
     return json.loads(serializers.serialize("json", queryset))
 
 def __init_time_slots():
-    for i in range(8, 17):
-        print(datetime.datetime.strptime('8:00:00', DATE_FORMAT))
+    for i in range(8, 10):
+        # print(datetime.datetime.strptime('8:00:00', DATE_FORMAT))
+        time_slots[f'0{i}:00:00'] = 3
+        time_slots[f'0{i}:15:00'] = 3
+        time_slots[f'0{i}:30:00'] = 3
+        time_slots[f'0{i}:45:00'] = 3
+
+    for i in range(10, 17):
+        # print(datetime.datetime.strptime('8:00:00', DATE_FORMAT))
         time_slots[f'{i}:00:00'] = 3
         time_slots[f'{i}:15:00'] = 3
         time_slots[f'{i}:30:00'] = 3

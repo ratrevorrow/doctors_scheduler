@@ -20,13 +20,13 @@ def doctors(request):
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         if add_doc(data):
-            return Response(status=HTTP_200_OK)
+            return Response(status=HTTP_201_CREATED)
     return Response(status=HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
 def all_appointments(request):
     """Get a list of all appointments for a particular doctor and particular day
-        endpoint: /appointments
+        - endpoint: /appointments
 
     Returns:
         Response: Returns the list of appointments for the specific doctor.
@@ -47,19 +47,18 @@ def doctors_appointments(request, pk):
     return Response(get_appts_for_doc(pk), status=HTTP_200_OK)
 
 @api_view(["GET"])
-def available_times_for_day(request, pk):
+def available_times_for_day(request, pk, selected_date):
     """Get the times and slot count available for a given day for doctor
         - endpoint: /doctors/<int:pk>/times/available
 
     Args:
         pk (int): primary key for doctor
+        selected_date (str) - YYYY-MM-DD
 
     Returns:
         Response: Object with key, vals of times, available count
     """
-    data = JSONParser().parse(request)
-    res, status = get_times_available_for_date(data)
-    return Response(res, status=status)
+    return Response(get_times_available_for_date(pk, selected_date), status=HTTP_200_OK)
 
 @api_view(["POST", "DELETE"])
 def appointment(request, pk):
@@ -85,7 +84,7 @@ def appointment(request, pk):
             return Response("Times have to be in 15 minute increments", status=HTTP_400_BAD_REQUEST)
         
         if add_appt(data):
-            return Response(status=HTTP_200_OK)
+            return Response(status=HTTP_201_CREATED)
 
     elif request.method == 'DELETE':
         delete_appt(pk)
