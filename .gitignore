@@ -1,3 +1,7 @@
 .vscode
 solution/.env
 .DS_Store
+*/__pycache__
+POA.txt
+server/venv/lib/python3.7/site-packages
+client/node_modules
