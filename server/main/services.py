@@ -19,6 +19,7 @@ def get_all_doctors():
     return User.objects.filter(role="DOCTOR").values('id', 'email', 'first_name', 'last_name')
 
 def get_all_patients():
+    # return get_items(User.objects.all())
     return User.objects.filter(role="PATIENT").values('id', 'email', 'first_name', 'last_name')
 
 def get_appts_for_doc(pk):
@@ -30,7 +31,7 @@ def get_appts():
 def get_times_available_for_date(pk, date):
     __init_time_slots()
     date = datetime.datetime.strptime(date, '%Y-%m-%d')
-    items = __get_items(Appointment.objects.filter(date__date=date))
+    items = get_items(Appointment.objects.filter(date__date=date))
     for item in items:
         date_time = datetime.datetime.strptime(
             item['fields']['date'], DATE_FORMAT_1)
@@ -66,7 +67,7 @@ def __create_or_fail(serializer):
     return False
 
 
-def __get_items(queryset):
+def get_items(queryset):
     return json.loads(serializers.serialize("json", queryset))
 
 
@@ -87,7 +88,7 @@ def __init_time_slots():
 
 ####################### PUBLIC HELPER FUNCTIONS #######################
 def is_fully_booked(new_appt):
-    length = len(__get_items(Appointment.objects.filter(
+    length = len(get_items(Appointment.objects.filter(
         doctor=new_appt['doctor'], date=new_appt['date'])))
     if length >= 3:
         return True
@@ -95,7 +96,7 @@ def is_fully_booked(new_appt):
 
 
 def is_patient_booked_already(new_appt):
-    length = len(__get_items(Appointment.objects.filter(
+    length = len(get_items(Appointment.objects.filter(
         date=new_appt['date'], doctor=new_appt['doctor'], patient=new_appt['patient'])))
     if length > 0:
         return True

@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
+from rest_framework.authtoken.models import Token
 from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT,
                                    HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND)
 from .services import (
@@ -14,9 +15,12 @@ from .services import (
     is_increment_of_fifteen,
     delete_appt,
     add_user,
-    get_all_patients
+    get_all_patients,
+    get_items
 )
 from django.views.decorators.csrf import csrf_exempt
+from .serializers import LoginSerializer, UserSerializer
+from .models import User
 
 ####################### GET REQUESTS ####################### 2
 @api_view(["GET", "POST"])
@@ -33,7 +37,7 @@ def doctors(request):
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         if add_user(data):
-            return Response(status=HTTP_201_CREATED)
+            return Response('User created', status=HTTP_201_CREATED)
     return Response(status=HTTP_400_BAD_REQUEST)
 
 @csrf_exempt
@@ -51,8 +55,22 @@ def patients(request):
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         if add_user(data):
-            return Response(status=HTTP_201_CREATED)
-    return Response(status=HTTP_400_BAD_REQUEST)
+            return Response('User created', status=HTTP_201_CREATED)
+    return Response('User already exists', status=HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+def login(request):
+    data = JSONParser().parse(request)
+    user = LoginSerializer(data=data)
+    if user.is_valid():
+        user = User.objects.get(email=data['email'])
+        token, _ = Token.objects.get_or_create(user=user)
+        user = User.objects.filter(email=data['email']).values('id', 'email', 'role', 'first_name', 'last_name')
+        return Response({'token': token.key, 'user': user[0]}, status=HTTP_200_OK)
+    else:
+        print(user.errors)
+        return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
+    pass
 
 @api_view(["GET"])
 def all_appointments(request):

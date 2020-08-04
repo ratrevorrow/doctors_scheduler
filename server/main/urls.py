@@ -14,6 +14,7 @@ urlpatterns = [
     ####################### POST REQUESTS #######################
     path('doctors/<int:pk>/appointment', views.appointment, name='add_appointment'),
     path('doctors', views.doctors, name='add_doctor'),
+    path('login', views.login, name='login'),
     ####################### DELETE REQUESTS #######################
     path('doctors/<int:pk>/appointment', views.appointment, name='delete_appointment'),
 ]
