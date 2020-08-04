@@ -1,38 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
 import * as actions from '../../store/actions';
-import { GenericResponse } from '../../store/models';
-import {
-  Avatar,
-  Button,
-  CssBaseline,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Link,
-  Grid,
-  Box,
-  Typography,
-  Container,
-  makeStyles,
-} from '@material-ui/core';
+import { UserState } from '../../store/signin/models';
+import { Button, TextField, FormControlLabel, Checkbox, Typography, makeStyles } from '@material-ui/core';
+import { signIn } from '../../store/selectors';
+import { RootState } from '../../store/models';
+import { Select } from 'antd';
 
-import { LockOutlined } from '@material-ui/icons';
+const { Option } = Select;
 
 interface Props {
-  fetchData: Routine;
-  response: GenericResponse;
-}
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit">Richard</Link> {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+  signIn: Routine;
+  userState: UserState;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -55,85 +35,78 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn: React.FC<Props> = ({ fetchData, response }) => {
+const SignIn: React.FC<Props> = ({ signIn, userState }) => {
   const classes = useStyles();
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [role, setRole] = useState<string>('');
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [fetchData]);
-
-  console.log(response);
+  console.log('userState');
+  console.log(userState);
 
   const onSubmit = () => {
-    console.log(email);
-    console.log(password);
+    console.log(email, password, role);
+    const obj = {
+      email: 'richxvafrd@test.com',
+      password: 'zxxvcxfcz',
+      role: 'PATIENT',
+    };
+    signIn(obj);
+    // signIn({
+    //   email: email,
+    //   password: password,
+    //   role: 'PATIENT',
+    // });
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlined />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-          <Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={onSubmit}>
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+    <>
+      <Typography component="h1" variant="h5">
+        Sign in
+      </Typography>
+      <form className={classes.form} noValidate>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
+          name="email"
+          autoComplete="email"
+          autoFocus
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Select defaultValue="lucy" style={{ width: 120 }} onChange={(roleSelected: string) => setRole(roleSelected)}>
+          <Option value="PATIENT">Patient</Option>
+          <Option value="DOCTOR">Doctor</Option>
+        </Select>
+        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+        <Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={onSubmit}>
+          Sign In
+        </Button>
+      </form>
+    </>
   );
 };
 
-const mapStateToProps = (state: GenericResponse) => ({ response: { ...state } });
+const mapStateToProps = (state: RootState) => ({ userState: signIn.getUserState(state) });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  signIn: actions.signIn.signIn,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

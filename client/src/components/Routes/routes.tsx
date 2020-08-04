@@ -1,34 +1,44 @@
-import React from 'react';
-import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { GenericResponse } from '../../store/models';
+import { RootState } from '../../store/models';
+import { UserState } from '../../store/signin/models';
 import Navbar from '../Navbar';
 import Login from '../../pages/login';
+import Home from '../../pages/home';
+import Scheduler from '../../pages/scheduler';
+import { signIn } from '../../store/selectors';
 
 interface Props {
-  data: GenericResponse;
+  userState: UserState;
 }
 
-const Routes: React.FC<Props> = ({ data }) => {
+const Routes: React.FC<RouteComponentProps & Props> = ({ userState, history, location }) => {
   // useEffect(() => {
-  //   fetchData();
-  // }, [fetchData]);
-
-  console.log(data);
+  //   if (!userState.data) history.push('/login');
+  //   else history.push('/');
+  // }, [history, userState.data]);
 
   return (
-    <BrowserRouter>
-      {/* <Navbar /> */}
+    <>
+      {!location.pathname.includes('login') && <Navbar />}
       <Switch>
-        <Route exact path="/" component={Login} />
-        {/* <Route exact path="/home" component={Navbar} /> */}
+        <Route exact path="/" component={Home} />
+        <Route exact path="/scheduler" component={Scheduler} />
+        <Route exact path="/login" component={Login} />
       </Switch>
-    </BrowserRouter>
+    </>
   );
 };
 
-const mapStateToProps = (state: GenericResponse) => ({ data: { ...state } });
+Routes.defaultProps = {
+  userState: {
+    data: undefined,
+    error: '',
+    pending: false,
+  },
+};
 
-const mapDispatchToProps = {};
+const mapStateToProps = (state: RootState) => ({ userState: signIn.getUserState(state) });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Routes);
+export default withRouter(connect(mapStateToProps)(Routes));

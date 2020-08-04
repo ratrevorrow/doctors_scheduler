@@ -9,31 +9,41 @@ const initialState: GenericResponse = {
   pending: false,
 };
 
-const fetchDataSuccess = (state: GenericResponse, { payload }: Action<GenericResponse>) => ({
+const signUpSuccess = (state: GenericResponse, { payload }: Action<GenericResponse>) => ({
   ...state,
   data: payload,
   pending: false,
 });
 
-const fetchDataError = (state: GenericResponse, { payload }: Action<GenericResponse>) => ({
+const signInSuccess = (state: GenericResponse, { payload }: Action<GenericResponse>) => ({
+  ...state,
+  data: payload,
+  pending: false,
+});
+
+const signUpError = (state: GenericResponse, { payload }: Action<GenericResponse>) => ({
   ...state,
   error: payload,
   pending: false,
 });
 
-// const fetchDataPending = (state: GenericResponse, { payload }: Action<GenericResponse>) => ({
-//   ...state,
-//   pending: true,
-// });
+const pending = (state: GenericResponse, { payload }: Action<GenericResponse>) => ({
+  ...state,
+  pending: true,
+});
 
-export default handleActions<any>(
+
+
+export default handleActions<any, any>(
   {
-    [signUp.SUCCESS]: fetchDataSuccess,
-    // [signUp.REQUEST]: fetchDataPending,
-    [signUp.FAILURE]: fetchDataError,
-    [signIn.SUCCESS]: fetchDataSuccess,
-    // [signIn.REQUEST]: fetchDataPending,
-    [signIn.FAILURE]: fetchDataError,
+    // SIGN UP
+    [signUp.SUCCESS]: signUpSuccess,
+    [signUp.TRIGGER]: pending,
+    [signUp.FAILURE]: signUpError,
+    // SIGN IN
+    [signIn.SUCCESS]: signUpSuccess,
+    [signIn.TRIGGER]: pending,
+    [signIn.FAILURE]: signUpError,
   },
   initialState,
 );

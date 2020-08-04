@@ -5,14 +5,11 @@ import * as actions from './actions';
 import { postProtocol } from '../../util/api';
 
 export function* signUp(action?: Action<string>) {
-  console.log(action?.payload);
-  const { data, err } = yield call(postProtocol, 'http://127.0.0.1:8000/api/patients', action?.payload);
-  if (data) {
-    console.log(data);
-    yield put(actions.signUp.success(data));
+  const { response, error } = yield call(postProtocol, 'http://127.0.0.1:8000/api/patients', action?.payload);
+  if (response) {
+    yield put(actions.signUp.success(response));
   } else {
-    console.log(err);
-    yield put(actions.signUp.failure(err));
+    yield put(actions.signUp.failure(error));
   }
 }
 
