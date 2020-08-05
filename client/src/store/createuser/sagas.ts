@@ -7,8 +7,10 @@ import { postProtocol } from '../../util/api';
 export function* createUser(action?: Action<string>) {
   const { response, error } = yield call(postProtocol, 'http://127.0.0.1:8000/api/createuser', action?.payload);
   if (response) {
+    console.log(response);
     yield put(actions.createUser.success(response));
   } else {
+    console.log(error);
     yield put(actions.createUser.failure(error));
   }
 }

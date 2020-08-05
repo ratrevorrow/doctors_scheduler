@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
 import * as actions from '../../store/actions';
 import { SignUpState } from '../../store/signup/models';
+import { signIn } from '../../store/selectors';
+import { signUp } from '../../store/selectors';
+import { RootState } from '../../store/models';
 import clsx from 'clsx';
 import { Button, TextField, Grid, Typography, makeStyles, CircularProgress } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
@@ -11,6 +14,7 @@ import './resetpassword.scss';
 
 interface Props {
   signUp: Routine;
+  email: string | undefined;
   signUpState: SignUpState;
 }
 
@@ -55,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ResetPassword: React.FC<Props> = ({ signUp, signUpState }) => {
+const ResetPassword: React.FC<Props> = ({ signUp, signUpState, email }) => {
   const classes = useStyles();
   const [password, setPassword] = useState<string>('');
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -66,12 +70,7 @@ const ResetPassword: React.FC<Props> = ({ signUp, signUpState }) => {
 
   const onSubmit = () => {
     setSubmitting(true);
-    const obj = {
-      email: 'sgrx2@scx2.com',
-      password: 'aascrxgdsadasdasd',
-    };
-    signUp(obj);
-    // signUp({ firstname, lastname, email, password });
+    signUp({ email, password });
   };
 
   return (
@@ -86,6 +85,7 @@ const ResetPassword: React.FC<Props> = ({ signUp, signUpState }) => {
               variant="outlined"
               required
               fullWidth
+              value={email}
               id="email"
               label="Email Address"
               name="email"
@@ -125,7 +125,10 @@ const ResetPassword: React.FC<Props> = ({ signUp, signUpState }) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({ signUpState: { ...state.signup } });
+const mapStateToProps = (state: RootState) => ({
+  email: signIn.getEmail(state),
+  signUpState: signUp.getSignUpState(state),
+});
 
 const mapDispatchToProps = {
   signUp: actions.signUp.signUp,

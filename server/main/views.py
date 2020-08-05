@@ -72,16 +72,20 @@ def create_user(request):
 @api_view(["POST"])
 def login(request):
     data = JSONParser().parse(request)
-    user = LoginSerializer(data=data)
-    if user.is_valid():
+    load_user = User.objects.filter(email=data['email']).values('id', 'email', 'role', 'first_name', 'last_name', 'has_set_password')[0]
+    load_user['firstName'] = load_user.pop('first_name')
+    load_user['lastName'] = load_user.pop('last_name')
+    load_user['hasSetPassword'] = load_user.pop('has_set_password')
+    if not load_user['hasSetPassword']:
+        return Response({'user': load_user}, status=HTTP_200_OK)
+
+    serialize_user = LoginSerializer(data=data)
+    if serialize_user.is_valid():
         user = User.objects.get(email=data['email'])
         token, _ = Token.objects.get_or_create(user=user)
-        user = User.objects.filter(email=data['email']).values('id', 'email', 'role', 'first_name', 'last_name', 'has_set_password')
-        user['firstName'] = user.pop('first_name')
-        user['lastName'] = user.pop('last_name')
-        return Response({'token': token.key, 'user': user[0]}, status=HTTP_200_OK)
+        return Response({'token': token.key, 'user': load_user}, status=HTTP_200_OK)
     else:
-        print(user.errors)
+        print(serialize_user.errors)
         return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
     pass
 

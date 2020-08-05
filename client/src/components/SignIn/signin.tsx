@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
 import * as actions from '../../store/actions';
+import { signIn } from '../../store/selectors';
 import { UserState } from '../../store/signin/models';
 import { Button, TextField, FormControlLabel, Checkbox, Typography, makeStyles } from '@material-ui/core';
-import { signIn } from '../../store/selectors';
 import { RootState } from '../../store/models';
 import { Select } from 'antd';
 
@@ -43,18 +43,7 @@ const SignIn: React.FC<Props> = ({ signIn, userState }) => {
   const [role, setRole] = useState<string>('');
 
   const onSubmit = () => {
-    console.log(email, password, role);
-    const obj = {
-      email: 'richxvafrd@test.com',
-      password: 'zxxvcxfcz',
-      role: 'PATIENT',
-    };
-    signIn(obj);
-    // signIn({
-    //   email: email,
-    //   password: password,
-    //   role: 'PATIENT',
-    // });
+    signIn({ email, password, role: role ? role : 'PATIENT' });
   };
 
   return (

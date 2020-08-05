@@ -42,14 +42,14 @@ const Navbar: React.FC<RouteComponentProps> = ({ history, location }) => {
       <Menu.Item onClick={() => handleClick(pages.scheduler)} key="scheduler">
         Scheduler
       </Menu.Item>
-      {/* {role === roles.RECEPTIONIST && (
+      {role === roles.RECEPTIONIST && (
         <Menu.Item onClick={() => handleClick(pages.createuser)} key="createuser">
           Create User
         </Menu.Item>
-      )} */}
-      <Menu.Item onClick={() => handleClick(pages.createuser)} key="createuser">
+      )}
+      {/* <Menu.Item onClick={() => handleClick(pages.createuser)} key="createuser">
         Create User
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   );
 };

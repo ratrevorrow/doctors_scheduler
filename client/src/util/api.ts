@@ -4,23 +4,22 @@ function handleResponse(response: Response) {
   return response.text().then((text: any) => {
     const data = text && JSON.parse(text);
     if (!response.ok) {
-      // if (response.status === 401) {
-      //   logout();
-      // }
-      // console.log('data');
-      // console.log(data);
-      const error = data || response.statusText;
-      // console.log('error');
-      // console.log(error);
+      let error;
+      if (response.status === 500) {
+        error = 'Internal Server';
+      } else {
+        error = data || response.statusText;
+      }
       return Promise.reject(error);
     }
-
     return data;
   });
 }
 
 const getAuthorization = (): Record<string, string> => {
-  const token: string = JSON.parse(localStorage.getItem('token') || '');
+  const token: string = localStorage.getItem('token') || '';
+  // const isToken = localStorage.getItem('token') ? true : false;
+  // const token: string | null = JSON.parse(isToken ? localStorage.getItem('token') : '');
   return token ? { Authorization: 'Token ' + token } : {};
 };
 

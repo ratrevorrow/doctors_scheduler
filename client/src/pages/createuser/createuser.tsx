@@ -22,20 +22,14 @@ const roles = {
 const CreateUser: React.FC<{ createUser: Routine }> = ({ createUser }) => {
   const onFinish = (values) => {
     if (!values.role) values.role = roles.PATIENT;
-    console.log('Success:', values);
-    const obj = {
-      firstName: 'Tom',
-      lastName: 'Hanks',
-      email: 'th@gmail.com',
-      role: 'PATIENT',
-    };
-    createUser(obj);
+    createUser(values);
   };
+
   return (
     <div className="center-container">
       <Form labelCol={{ span: 4 }} layout="horizontal" style={{ width: '60%' }} onFinish={onFinish}>
         <Form.Item label="First Name" name="firstName">
-          <Input size="large" placeholder="Bob" prefix={<UserOutlined />} />
+          <Input size="large" placeholder="Bob" prefix={<UserOutlined />} autoFocus />
         </Form.Item>
         <Form.Item label="Last Name" name="lastName">
           <Input size="large" placeholder="Vance" prefix={<UserOutlined />} />
@@ -44,12 +38,15 @@ const CreateUser: React.FC<{ createUser: Routine }> = ({ createUser }) => {
           <Input size="large" placeholder="abcd1234@yahoo.com" prefix={<MailOutlined />} />
         </Form.Item>
         <Form.Item label="User Type" name="role">
-          <Radio.Group style={{ width: '100%' }} value="PATIENT" defaultValue="PATIENT" size="large">
-            <Radio.Button style={{ width: '50%' }} value="PATIENT">
+          <Radio.Group style={{ width: '100%' }} value="PATIENT" size="large">
+            <Radio.Button style={{ width: '33.33%' }} value="PATIENT">
               Patient
             </Radio.Button>
-            <Radio.Button style={{ width: '50%' }} value="DOCTOR">
+            <Radio.Button style={{ width: '33.33%' }} value="DOCTOR">
               Doctor
+            </Radio.Button>
+            <Radio.Button style={{ width: '33.33%' }} value="RECEPTIONIST">
+              RECEPTIONIST
             </Radio.Button>
           </Radio.Group>
         </Form.Item>

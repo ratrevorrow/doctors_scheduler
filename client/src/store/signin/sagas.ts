@@ -13,6 +13,8 @@ export function* signIn(action?: Action<string>) {
     localStorage.setItem('role', JSON.stringify(userInformation.user.role));
     yield put(actions.signIn.success(response));
   } else {
+    console.error('Error occurred while signing user in. (sagas/signin)');
+    console.error(error.error);
     yield put(actions.signIn.failure(error));
   }
 }

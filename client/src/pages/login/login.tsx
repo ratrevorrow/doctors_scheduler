@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { signIn } from '../../store/selectors';
+import { RootState } from '../../store/models';
 import ResetPassword from '../../components/ResetPassword';
 import SignIn from '../../components/SignIn';
-import { Avatar, CssBaseline, Link, Grid, Box, Typography, Container, makeStyles } from '@material-ui/core';
+import { Avatar, CssBaseline, Link, Box, Typography, Container, makeStyles } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
-
+import { connect } from 'react-redux';
 import { LockOutlined } from '@material-ui/icons';
 
 function Copyright() {
@@ -57,9 +59,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login: React.FC = () => {
+const Login: React.FC<{ hasSetPassword: boolean | undefined }> = ({ hasSetPassword }) => {
   const classes = useStyles();
-  const [toggleSign, setToggleSign] = useState<boolean>(false);
+  // const [toggleSign, setToggleSign] = useState<boolean>(false);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -69,18 +71,18 @@ const Login: React.FC = () => {
         </Avatar>
 
         {/* RENDER SIGN IN / UP */}
-        {toggleSign ? <ResetPassword /> : <SignIn />}
+        {hasSetPassword !== undefined && !hasSetPassword ? <ResetPassword /> : <SignIn />}
 
-        <Grid container>
+        {/* <Grid container>
           <Grid item xs>
             <Link variant="body2">Forgot password?</Link>
-          </Grid>
-          <Grid item>
+          </Grid> */}
+        {/* <Grid item>
             <Link style={{ cursor: 'pointer' }} onClick={() => setToggleSign(!toggleSign)} variant="body2">
               {toggleSign ? 'Already have an account? Sign in' : "Don't have an account? Sign Up"}
             </Link>
-          </Grid>
-        </Grid>
+          </Grid> */}
+        {/* </Grid> */}
       </div>
       <Box mt={5}>
         <Copyright />
@@ -89,4 +91,8 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state: RootState) => ({ hasSetPassword: signIn.getHasSetPassword(state) });
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

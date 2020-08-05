@@ -20,3 +20,4 @@ export const getUser = (state: RootState): User | undefined => getUserInformatio
 // getUser
 export const getRole = (state: RootState): string | undefined => getUser(state)?.role;
 export const getHasSetPassword = (state: RootState): boolean | undefined => getUser(state)?.hasSetPassword;
+export const getEmail = (state: RootState): string | undefined => getUser(state)?.email;

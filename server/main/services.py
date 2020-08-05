@@ -46,9 +46,13 @@ def add_appt(new_appt):
     return __create_or_fail(AppointmentSerializer(data=new_appt))
 
 def alter_user(data):
+    if not data['password']:
+        print('Empty password')
+        return False
     user = User.objects.get(email=data['email'])
     user.set_password(data['password'])
-    user.set_has_set_password(True)
+    user.set_has_changed_password(True)
+    user.save()
     print("Changed password")
     return True
 
