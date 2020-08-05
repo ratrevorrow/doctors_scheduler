@@ -5,6 +5,7 @@ import { RootState } from '../../store/models';
 import { UserState } from '../../store/signin/models';
 import Navbar from '../Navbar';
 import Login from '../../pages/login';
+import CreateUser from '../../pages/createuser';
 import Home from '../../pages/home';
 import Scheduler from '../../pages/scheduler';
 import { signIn } from '../../store/selectors';
@@ -18,13 +19,13 @@ const Routes: React.FC<RouteComponentProps & Props> = ({ userState, history, loc
   //   if (!userState.data) history.push('/login');
   //   else history.push('/');
   // }, [history, userState.data]);
-
   return (
     <>
       {!location.pathname.includes('login') && <Navbar />}
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/scheduler" component={Scheduler} />
+        <Route exact path="/createuser" component={CreateUser} />
         <Route exact path="/login" component={Login} />
       </Switch>
     </>

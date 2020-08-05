@@ -16,7 +16,8 @@ from .services import (
     delete_appt,
     add_user,
     get_all_patients,
-    get_items
+    get_items,
+    alter_user
 )
 from django.views.decorators.csrf import csrf_exempt
 from .serializers import LoginSerializer, UserSerializer
@@ -54,9 +55,19 @@ def patients(request):
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        if add_user(data):
-            return Response('User created', status=HTTP_201_CREATED)
-    return Response('User already exists', status=HTTP_400_BAD_REQUEST)
+        if alter_user(data):
+            return Response('User altered', status=HTTP_201_CREATED)
+    return Response('Cannot alter user', status=HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+def create_user(request):
+    data = JSONParser().parse(request)
+    data['first_name'] = data.pop('firstName')
+    data['last_name'] = data.pop('lastName')
+    print(data)
+    if add_user(data):
+        return Response('User created', status=HTTP_201_CREATED)
+    return Response('Cannot create user', status=HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 def login(request):
@@ -65,7 +76,9 @@ def login(request):
     if user.is_valid():
         user = User.objects.get(email=data['email'])
         token, _ = Token.objects.get_or_create(user=user)
-        user = User.objects.filter(email=data['email']).values('id', 'email', 'role', 'first_name', 'last_name')
+        user = User.objects.filter(email=data['email']).values('id', 'email', 'role', 'first_name', 'last_name', 'has_set_password')
+        user['firstName'] = user.pop('first_name')
+        user['lastName'] = user.pop('last_name')
         return Response({'token': token.key, 'user': user[0]}, status=HTTP_200_OK)
     else:
         print(user.errors)

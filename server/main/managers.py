@@ -1,12 +1,12 @@
 from django.contrib.auth.models import BaseUserManager
 
 class UserManager(BaseUserManager):
-    def create_user(self, first_name, last_name, email, role, password, **extra_fields):
+    def create_user(self, first_name, last_name, email, role, **extra_fields):
         if not email:
             raise ValueError('The Email must be set')
         email = self.normalize_email(email)
         user = self.model(first_name=first_name, last_name=last_name, email=email, role=role, **extra_fields)
-        user.set_password(password)
+        user.set_password(self.make_random_password())
         user.save()
         return user
 

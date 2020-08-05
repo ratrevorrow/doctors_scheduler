@@ -13,8 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
             validated_data['first_name'],
             validated_data['last_name'],
             validated_data['email'],
-            validated_data['role'],
-            validated_data['password'],
+            validated_data['role']
         )
         return user
 

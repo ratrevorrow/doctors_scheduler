@@ -42,9 +42,6 @@ const SignIn: React.FC<Props> = ({ signIn, userState }) => {
   const [password, setPassword] = useState<string>('');
   const [role, setRole] = useState<string>('');
 
-  console.log('userState');
-  console.log(userState);
-
   const onSubmit = () => {
     console.log(email, password, role);
     const obj = {
@@ -90,9 +87,15 @@ const SignIn: React.FC<Props> = ({ signIn, userState }) => {
           autoComplete="current-password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Select defaultValue="lucy" style={{ width: 120 }} onChange={(roleSelected: string) => setRole(roleSelected)}>
+        <Select
+          defaultValue="Patient"
+          style={{ width: '100%' }}
+          onChange={(roleSelected: string) => setRole(roleSelected)}
+          size="large"
+        >
           <Option value="PATIENT">Patient</Option>
           <Option value="DOCTOR">Doctor</Option>
+          <Option value="RECEPTIONIST">Receptionist</Option>
         </Select>
         <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
         <Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={onSubmit}>

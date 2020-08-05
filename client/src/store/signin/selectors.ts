@@ -7,7 +7,16 @@ const DOMAIN = 'signin';
 
 const getState = (state: RootState): UserState => state[DOMAIN];
 
+// getState
 export const getUserState = (state: RootState): UserState => getState(state);
+
+// getUserState
 export const getUserInformation = (state: RootState): UserInformation | undefined => getUserState(state).data;
-export const getToken = (state: RootState): string | undefined => getUserState(state).data?.token;
-export const getUser = (state: RootState): User | undefined => getUserState(state).data?.user;
+
+// getUserInformation
+export const getToken = (state: RootState): string | undefined => getUserInformation(state)?.token;
+export const getUser = (state: RootState): User | undefined => getUserInformation(state)?.user;
+
+// getUser
+export const getRole = (state: RootState): string | undefined => getUser(state)?.role;
+export const getHasSetPassword = (state: RootState): boolean | undefined => getUser(state)?.hasSetPassword;

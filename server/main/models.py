@@ -10,13 +10,18 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     ROLE = (
         ('DOCTOR', 'Doctor'),
-        ('PATIENT', 'Patient')
+        ('PATIENT', 'Patient'),
+        ('RECEPTIONIST', 'Receptionist'),
     )
-    role = models.CharField(max_length=7, choices=ROLE, blank=True, null=True)
+    role = models.CharField(max_length=12, choices=ROLE, blank=True, null=True)
     objects = UserManager()
+    has_set_password = models.BooleanField(default=False)
     
     def __str__(self):
         return self.email
+
+    def set_has_changed_password(self, option):
+        self.has_set_password = option
        
 class Appointment(models.Model):
     date = models.DateTimeField()

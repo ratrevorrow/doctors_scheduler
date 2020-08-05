@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import ResetPassword from '../../components/ResetPassword';
 import SignIn from '../../components/SignIn';
-import SignUp from '../../components/SignUp';
 import { Avatar, CssBaseline, Link, Grid, Box, Typography, Container, makeStyles } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
 
@@ -69,7 +69,7 @@ const Login: React.FC = () => {
         </Avatar>
 
         {/* RENDER SIGN IN / UP */}
-        {toggleSign ? <SignUp /> : <SignIn />}
+        {toggleSign ? <ResetPassword /> : <SignIn />}
 
         <Grid container>
           <Grid item xs>

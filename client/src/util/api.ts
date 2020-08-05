@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-function handleResponse(response: any) {
+function handleResponse(response: Response) {
   return response.text().then((text: any) => {
     const data = text && JSON.parse(text);
     if (!response.ok) {
@@ -19,6 +19,11 @@ function handleResponse(response: any) {
   });
 }
 
+const getAuthorization = (): Record<string, string> => {
+  const token: string = JSON.parse(localStorage.getItem('token') || '');
+  return token ? { Authorization: 'Token ' + token } : {};
+};
+
 export const getProtocol = (uri: string) =>
   axios
     .get(uri)
@@ -28,7 +33,7 @@ export const getProtocol = (uri: string) =>
 export const postProtocol = (uri: string, data: any) =>
   fetch(uri, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...getAuthorization() },
     body: JSON.stringify({ ...data }),
   })
     .then(handleResponse)

@@ -15,7 +15,7 @@ interface Props extends RouteComponentProps {
 const FORMAT = 'YYYY-MM-DD HH:mm';
 
 const Scheduler: React.FC<Props> = () => {
-  const [date, setDate] = useState<any>(null);
+  const [date, setDate] = useState<moment.Moment | null>(null);
   function range(start, end) {
     const result: number[] = [];
     for (let i = start; i < end; i++) {

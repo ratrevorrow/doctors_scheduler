@@ -16,9 +16,10 @@ export type UserInformation = {
 };
 
 export type User = {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   id: number;
   role: string;
+  hasSetPassword: boolean;
 };

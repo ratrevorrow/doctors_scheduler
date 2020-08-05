@@ -45,8 +45,15 @@ def add_appt(new_appt):
     new_appt['date'].astimezone(tz=pytz.UTC)
     return __create_or_fail(AppointmentSerializer(data=new_appt))
 
+def alter_user(data):
+    user = User.objects.get(email=data['email'])
+    user.set_password(data['password'])
+    user.set_has_set_password(True)
+    print("Changed password")
+    return True
 
 def add_user(user):
+    user['password'] = 'initial_password'
     return __create_or_fail(UserSerializer(data=user))
 
 ####################### DELETE #######################
@@ -62,8 +69,10 @@ def delete_appt(pk):
 def __create_or_fail(serializer):
     if serializer.is_valid():
         serializer.save()
-        print('saved')
+        print('User/Appointment saved to database')
         return True
+    print(serializer.errors)
+    print(serializer.error_messages)
     return False
 
 
