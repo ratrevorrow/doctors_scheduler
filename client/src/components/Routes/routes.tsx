@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Switch, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootState } from '../../store/models';
@@ -16,10 +16,10 @@ interface Props {
 }
 
 const Routes: React.FC<RouteComponentProps & Props> = ({ userInformation, hasSetPassword, history, location }) => {
-  useEffect(() => {
-    if (!hasSetPassword) history.push('/login');
-    else history.push('/');
-  }, [history, userInformation, hasSetPassword]);
+  // useEffect(() => {
+  //   if (!hasSetPassword) history.push('/login');
+  //   else history.push('/');
+  // }, [history, userInformation, hasSetPassword]);
 
   return (
     <>

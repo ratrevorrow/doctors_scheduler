@@ -6,7 +6,8 @@ from django.core import serializers
 from django.utils import timezone
 import pytz
 from .models import *
-from .serializers import AppointmentSerializer, UserSerializer # AppointmentSerializer, DoctorSerializer, 
+# AppointmentSerializer, DoctorSerializer,
+from .serializers import AppointmentSerializer, UserSerializer
 import datetime
 
 timezone.now()
@@ -15,18 +16,24 @@ DATE_FORMAT_2 = '%Y-%m-%d %H:%M:%S'
 time_slots = {}
 
 ####################### GET #######################
+
+
 def get_all_doctors():
     return User.objects.filter(role="DOCTOR").values('id', 'email', 'first_name', 'last_name')
+
 
 def get_all_patients():
     # return get_items(User.objects.all())
     return User.objects.filter(role="PATIENT").values('id', 'email', 'first_name', 'last_name')
 
+
 def get_appts_for_doc(pk):
     return Appointment.objects.filter(doctor=pk).values('id', 'date', 'patient')
 
+
 def get_appts():
     return Appointment.objects.all().values('id', 'date', 'doctor', 'patient')
+
 
 def get_times_available_for_date(pk, date):
     __init_time_slots()
@@ -39,11 +46,14 @@ def get_times_available_for_date(pk, date):
     return time_slots
 
 ####################### POST #######################
+
+
 def add_appt(new_appt):
     new_appt['date'] = datetime.datetime.strptime(
         new_appt['date'], DATE_FORMAT_2)
     new_appt['date'].astimezone(tz=pytz.UTC)
     return __create_or_fail(AppointmentSerializer(data=new_appt))
+
 
 def alter_user(data):
     if not data['password']:
@@ -56,11 +66,14 @@ def alter_user(data):
     print("Changed password")
     return True
 
+
 def add_user(user):
     user['password'] = 'initial_password'
     return __create_or_fail(UserSerializer(data=user))
 
 ####################### DELETE #######################
+
+
 def delete_appt(pk):
     try:
         Appointment.objects.get(id=pk).delete()
@@ -100,6 +113,8 @@ def __init_time_slots():
     time_slots['17:00:00'] = 3
 
 ####################### PUBLIC HELPER FUNCTIONS #######################
+
+
 def is_fully_booked(new_appt):
     length = len(get_items(Appointment.objects.filter(
         doctor=new_appt['doctor'], date=new_appt['date'])))

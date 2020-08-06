@@ -23,7 +23,9 @@ from django.views.decorators.csrf import csrf_exempt
 from .serializers import LoginSerializer, UserSerializer
 from .models import User
 
-####################### GET REQUESTS ####################### 2
+# GET REQUESTS ####################### 2
+
+
 @api_view(["GET", "POST"])
 def doctors(request):
     """Add/Get a list of all doctors
@@ -40,6 +42,7 @@ def doctors(request):
         if add_user(data):
             return Response('User created', status=HTTP_201_CREATED)
     return Response(status=HTTP_400_BAD_REQUEST)
+
 
 @csrf_exempt
 @api_view(["GET", "POST"])
@@ -59,6 +62,7 @@ def patients(request):
             return Response('User altered', status=HTTP_201_CREATED)
     return Response('Cannot alter user', status=HTTP_400_BAD_REQUEST)
 
+
 @api_view(["POST"])
 def create_user(request):
     data = JSONParser().parse(request)
@@ -69,10 +73,12 @@ def create_user(request):
         return Response('User created', status=HTTP_201_CREATED)
     return Response('Cannot create user', status=HTTP_400_BAD_REQUEST)
 
+
 @api_view(["POST"])
 def login(request):
     data = JSONParser().parse(request)
-    load_user = User.objects.filter(email=data['email']).values('id', 'email', 'role', 'first_name', 'last_name', 'has_set_password')[0]
+    load_user = User.objects.filter(email=data['email']).values(
+        'id', 'email', 'role', 'first_name', 'last_name', 'has_set_password')[0]
     load_user['firstName'] = load_user.pop('first_name')
     load_user['lastName'] = load_user.pop('last_name')
     load_user['hasSetPassword'] = load_user.pop('has_set_password')
@@ -89,6 +95,7 @@ def login(request):
         return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
     pass
 
+
 @api_view(["GET"])
 def all_appointments(request):
     """Get a list of all appointments for a particular doctor and particular day
@@ -98,6 +105,7 @@ def all_appointments(request):
         Response: Returns the list of appointments for the specific doctor.
     """
     return Response(get_appts(), status=HTTP_200_OK)
+
 
 @api_view(["GET"])
 def doctors_appointments(request, pk):
@@ -112,6 +120,7 @@ def doctors_appointments(request, pk):
     """
     return Response(get_appts_for_doc(pk), status=HTTP_200_OK)
 
+
 @api_view(["GET"])
 def available_times_for_day(request, pk, selected_date):
     """Get the times and slot count available for a given day for doctor
@@ -125,6 +134,7 @@ def available_times_for_day(request, pk, selected_date):
         Response: Object with key, vals of times, available count
     """
     return Response(get_times_available_for_date(pk, selected_date), status=HTTP_200_OK)
+
 
 @api_view(["POST", "DELETE"])
 def appointment(request, pk):
@@ -148,7 +158,7 @@ def appointment(request, pk):
             return Response("Patient is already booked for that time", status=HTTP_400_BAD_REQUEST)
         elif not is_increment_of_fifteen(data):
             return Response("Times have to be in 15 minute increments", status=HTTP_400_BAD_REQUEST)
-        
+
         if add_appt(data):
             return Response(status=HTTP_201_CREATED)
 
@@ -156,6 +166,5 @@ def appointment(request, pk):
         if delete_appt(pk):
             return Response(status=HTTP_204_NO_CONTENT)
         return Response("Unable to delete appointment. The ID may not exist", status=HTTP_400_BAD_REQUEST)
-        
 
     return Response("Unable to add appointment. Check date format.", status=HTTP_400_BAD_REQUEST)

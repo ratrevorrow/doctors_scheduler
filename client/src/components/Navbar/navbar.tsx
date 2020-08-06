@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Menu } from 'antd';
+import { Menu, Dropdown } from 'antd';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
+import './navbar.scss';
 
 type Pages = {
   home: Page;
@@ -31,26 +34,33 @@ const Navbar: React.FC<RouteComponentProps> = ({ history, location }) => {
     history.push(page.url);
     setCurrent(page.key);
   };
-
   const role = JSON.parse(localStorage.getItem('role') || '');
+  const menu: JSX.Element = (
+    <Menu>
+      <Menu.Item>Account</Menu.Item>
+      <Menu.Item>Logout</Menu.Item>
+    </Menu>
+  );
 
   return (
-    <Menu selectedKeys={[current]} mode="horizontal" theme="dark">
-      <Menu.Item onClick={() => handleClick(pages.home)} key="dashboard">
-        Dashboard
-      </Menu.Item>
-      <Menu.Item onClick={() => handleClick(pages.scheduler)} key="scheduler">
-        Scheduler
-      </Menu.Item>
-      {role === roles.RECEPTIONIST && (
-        <Menu.Item onClick={() => handleClick(pages.createuser)} key="createuser">
-          Create User
+    <>
+      <Menu selectedKeys={[current]} mode="horizontal" theme="dark">
+        <Menu.Item onClick={() => handleClick(pages.home)} key="dashboard">
+          Dashboard
         </Menu.Item>
-      )}
-      {/* <Menu.Item onClick={() => handleClick(pages.createuser)} key="createuser">
-        Create User
-      </Menu.Item> */}
-    </Menu>
+        <Menu.Item onClick={() => handleClick(pages.scheduler)} key="scheduler">
+          Scheduler
+        </Menu.Item>
+        {role === roles.RECEPTIONIST && (
+          <Menu.Item onClick={() => handleClick(pages.createuser)} key="createuser">
+            Create User
+          </Menu.Item>
+        )}
+        <div className="logout">
+          <Dropdown.Button size="large" overlay={menu} icon={<AccountCircleIcon fontSize="default" />} />
+        </div>
+      </Menu>
+    </>
   );
 };
 

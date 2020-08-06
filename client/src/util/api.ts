@@ -23,9 +23,9 @@ const getAuthorization = (): Record<string, string> => {
   return token ? { Authorization: 'Token ' + token } : {};
 };
 
-export const getProtocol = (uri: string) =>
+export const getProtocol = (uri: string, headers = {}) =>
   axios
-    .get(uri)
+    .get(uri, headers)
     .then((res) => res.data)
     .catch((err) => err);
 
