@@ -8,6 +8,7 @@ urlpatterns = [
     ####################### GET REQUESTS #######################
     path('doctors', views.doctors, name='get_doctors'),
     path('patients', views.patients, name='get_patients'),
+    path('users', views.all_users, name='all_users'),
     path('appointments', views.all_appointments, name='all_appointments'),
     path('doctors/<int:pk>/appointments',
          views.doctors_appointments, name='appointments'),

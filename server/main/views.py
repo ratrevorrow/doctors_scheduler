@@ -17,7 +17,8 @@ from .services import (
     add_user,
     get_all_patients,
     get_items,
-    alter_user
+    alter_user,
+    get_all_users
 )
 from django.views.decorators.csrf import csrf_exempt
 from .serializers import LoginSerializer, UserSerializer
@@ -62,6 +63,12 @@ def patients(request):
             return Response('User altered', status=HTTP_201_CREATED)
     return Response('Cannot alter user', status=HTTP_400_BAD_REQUEST)
 
+@api_view(["GET"])
+def all_users(request):
+    users = get_all_users()
+    # users['first_name'] = users.pop('firstName')
+    # users['last_name'] = users.pop('lastName')
+    return Response(users, status=HTTP_200_OK)
 
 @api_view(["POST"])
 def create_user(request):

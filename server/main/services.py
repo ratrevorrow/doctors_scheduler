@@ -26,6 +26,8 @@ def get_all_patients():
     # return get_items(User.objects.all())
     return User.objects.filter(role="PATIENT").values('id', 'email', 'first_name', 'last_name')
 
+def get_all_users():
+    return User.objects.all().values('id', 'email', 'first_name', 'last_name', 'role')
 
 def get_appts_for_doc(pk):
     return Appointment.objects.filter(doctor=pk).values('id', 'date', 'patient')
