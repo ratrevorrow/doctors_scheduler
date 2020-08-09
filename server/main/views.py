@@ -22,7 +22,6 @@ from .services import (
 from django.views.decorators.csrf import csrf_exempt
 from .serializers import LoginSerializer, UserSerializer
 from .models import User
-from django.contrib.auth import logout
 
 # GET REQUESTS ####################### 2
 
@@ -69,7 +68,6 @@ def create_user(request):
     data = JSONParser().parse(request)
     data['first_name'] = data.pop('firstName')
     data['last_name'] = data.pop('lastName')
-    print(data)
     if add_user(data):
         return Response('User created', status=HTTP_201_CREATED)
     return Response('Cannot create user', status=HTTP_400_BAD_REQUEST)
@@ -78,9 +76,11 @@ def create_user(request):
 @api_view(["POST"])
 def login(request):
     data = JSONParser().parse(request)
-    print(User.objects.get(email=data['email']))
-    load_user = User.objects.filter(email=data['email']).values(
-        'id', 'email', 'role', 'first_name', 'last_name', 'has_set_password')[0]
+    try:
+        load_user = User.objects.filter(email=data['email']).values(
+            'id', 'email', 'role', 'first_name', 'last_name', 'has_set_password')[0]
+    except:
+        return Response("You haven't been added to the system yet. Call the office to get started.", status=HTTP_404_NOT_FOUND)
     load_user['firstName'] = load_user.pop('first_name')
     load_user['lastName'] = load_user.pop('last_name')
     load_user['hasSetPassword'] = load_user.pop('has_set_password')
@@ -94,14 +94,8 @@ def login(request):
         return Response({'token': token.key, 'user': load_user}, status=HTTP_200_OK)
     else:
         print(serialize_user.errors)
-        return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
-    pass
+        return Response('Incorrect Credentials', status=HTTP_404_NOT_FOUND)
 
-@api_view(["POST"])
-def logout(request):
-    print('logging out')
-    logout(request._request)
-    return Response("Logged out")
 
 @api_view(["GET"])
 def all_appointments(request):

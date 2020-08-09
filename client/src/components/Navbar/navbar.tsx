@@ -39,7 +39,7 @@ const Navbar: React.FC<RouteComponentProps> = ({ history, location }) => {
   const logout = () => {
     localStorage.setItem('token', '');
     postProtocol('http://localhost:8000/api/logout', {}).then((res) => console.log(res));
-    history.push('/');
+    history.push('/login');
   };
   const menu: JSX.Element = (
     <Menu>

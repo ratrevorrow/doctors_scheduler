@@ -20,7 +20,7 @@ export const SignIn: React.FC<Props> = ({ signIn, userState }) => {
   });
 
   const onSubmit = () => {
-    signIn({ email, password });
+    email.length > 0 && password.length > 0 && signIn({ email, password });
   };
 
   return (

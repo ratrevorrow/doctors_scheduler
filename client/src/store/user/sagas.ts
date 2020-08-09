@@ -19,8 +19,8 @@ export function* signIn(action?: Action<string>) {
     localStorage.setItem('role', JSON.stringify(userInformation.user.role));
     yield put(actions.signIn.success(response));
   } else {
-    console.error('Error occurred while signing user in. (sagas/signin)');
-    console.error(error.error);
+    console.error('Error occurred while signing user in. (user/sagas/signin)');
+    console.error(error);
     yield put(actions.signIn.failure(error));
   }
 }
@@ -31,18 +31,19 @@ export function* createUser(action?: Action<string>) {
     console.log(response);
     yield put(actions.createUser.success(response));
   } else {
+    console.error('Error occurred while creating user.  (user/sagas/createUser)');
     console.log(error);
     yield put(actions.createUser.failure(error));
   }
 }
 
-export function* signUp(action?: Action<string>) {
+export function* resetPassword(action?: Action<string>) {
   const { response, error } = yield call(postProtocol, URI.RESETPASSWORD, action?.payload);
   if (response) {
     console.log(response);
     yield put(actions.resetPassword.success(response));
   } else {
-    console.error('Error occurred while resetting password.  (sagas/signUp)');
+    console.error('Error occurred while resetting password.  (user/sagas/resetPassword)');
     console.error(error);
     yield put(actions.resetPassword.failure(error));
   }
@@ -52,6 +53,6 @@ export default function* exampleSagas() {
   yield all([
     takeLatest(actions.signIn.TRIGGER, signIn),
     takeLatest(actions.createUser.TRIGGER, createUser),
-    takeLatest(actions.resetPassword.TRIGGER, signUp),
+    takeLatest(actions.resetPassword.TRIGGER, resetPassword),
   ]);
 }
