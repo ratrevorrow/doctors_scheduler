@@ -1,17 +1,7 @@
 import React from 'react';
 import { Form, Radio, Button, Input } from 'antd';
 import { UserOutlined, MailOutlined } from '@ant-design/icons';
-import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
-import { RootState } from '../../store/models';
-import * as actions from '../../store/actions';
-
-type UserForm = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-};
 
 const roles = {
   PATIENT: 'PATIENT',
@@ -19,7 +9,7 @@ const roles = {
   RECEPTIONIST: 'RECEPTIONIST',
 };
 
-const CreateUser: React.FC<{ createUser: Routine }> = ({ createUser }) => {
+export const CreateUser: React.FC<{ createUser: Routine }> = ({ createUser }) => {
   const onFinish = (values) => {
     if (!values.role) values.role = roles.PATIENT;
     createUser(values);
@@ -59,11 +49,3 @@ const CreateUser: React.FC<{ createUser: Routine }> = ({ createUser }) => {
     </div>
   );
 };
-
-const mapStateToProps = (state: RootState) => ({});
-
-const mapDispatchToProps = {
-  createUser: actions.createUser.createUser,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateUser);

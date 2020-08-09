@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Menu, Dropdown } from 'antd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { postProtocol } from '../../util/api';
 
 import './navbar.scss';
 
@@ -35,10 +36,15 @@ const Navbar: React.FC<RouteComponentProps> = ({ history, location }) => {
     setCurrent(page.key);
   };
   const role = JSON.parse(localStorage.getItem('role') || '');
+  const logout = () => {
+    localStorage.setItem('token', '');
+    postProtocol('http://localhost:8000/api/logout', {}).then((res) => console.log(res));
+    history.push('/');
+  };
   const menu: JSX.Element = (
     <Menu>
       <Menu.Item>Account</Menu.Item>
-      <Menu.Item>Logout</Menu.Item>
+      <Menu.Item onClick={logout}>Logout</Menu.Item>
     </Menu>
   );
 

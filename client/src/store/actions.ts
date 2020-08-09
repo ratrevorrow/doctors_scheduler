@@ -1,7 +1,3 @@
-import * as signUpActions from './signup/actions';
-import * as signInActions from './signin/actions';
-import * as createUserActions from './createuser/actions';
+import * as userActions from './user/actions';
 
-export { signUpActions as signUp };
-export { signInActions as signIn };
-export { createUserActions as createUser };
+export { userActions as user };

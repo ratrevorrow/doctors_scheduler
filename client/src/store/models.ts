@@ -1,15 +1,5 @@
-import { UserState } from './signin/models';
-import { SignUpState } from './signup/models';
-import { CreateUserState } from './createuser/models';
-
-export type GenericResponse = {
-  data: any;
-  error: string;
-  pending: boolean;
-};
+import { State } from './user/models';
 
 export type RootState = {
-  signin: UserState;
-  signup: SignUpState;
-  createuser: CreateUserState;
+  user: State;
 };

@@ -1,10 +1,10 @@
-export type ExampleData = {
-  data: any;
-  error: string;
-  pending: boolean;
+export type State = {
+  signin: GeneralState | undefined;
+  resetpassword: GeneralState | undefined;
+  createuser: GeneralState | undefined;
 };
 
-export type UserState = {
+export type GeneralState = {
   data: UserInformation | undefined;
   error: string;
   pending: boolean;

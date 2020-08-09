@@ -11,6 +11,7 @@ urlpatterns = [
     path('appointments', views.all_appointments, name='all_appointments'),
     path('doctors/<int:pk>/appointments', views.doctors_appointments, name='appointments'),
     path('doctors/<int:pk>/times/<str:selected_date>', views.available_times_for_day, name='available_times'),
+    path('logout', views.logout, name='logout'),
     ####################### POST REQUESTS #######################
     path('doctors/<int:pk>/appointment', views.appointment, name='add_appointment'),
     path('doctors', views.doctors, name='add_doctor'),

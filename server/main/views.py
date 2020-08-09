@@ -22,6 +22,7 @@ from .services import (
 from django.views.decorators.csrf import csrf_exempt
 from .serializers import LoginSerializer, UserSerializer
 from .models import User
+from django.contrib.auth import logout
 
 # GET REQUESTS ####################### 2
 
@@ -77,6 +78,7 @@ def create_user(request):
 @api_view(["POST"])
 def login(request):
     data = JSONParser().parse(request)
+    print(User.objects.get(email=data['email']))
     load_user = User.objects.filter(email=data['email']).values(
         'id', 'email', 'role', 'first_name', 'last_name', 'has_set_password')[0]
     load_user['firstName'] = load_user.pop('first_name')
@@ -95,6 +97,11 @@ def login(request):
         return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
     pass
 
+@api_view(["POST"])
+def logout(request):
+    print('logging out')
+    logout(request._request)
+    return Response("Logged out")
 
 @api_view(["GET"])
 def all_appointments(request):

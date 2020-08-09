@@ -1,49 +1,26 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
-import * as actions from '../../store/actions';
-import { signIn } from '../../store/selectors';
-import { UserState } from '../../store/signin/models';
-import { Button, TextField, FormControlLabel, Checkbox, Typography, makeStyles } from '@material-ui/core';
-import { RootState } from '../../store/models';
-import { Select } from 'antd';
-
-const { Option } = Select;
+import { GeneralState } from '../../store/user/models';
+import { Button, TextField, FormControlLabel, Checkbox, Typography, CircularProgress } from '@material-ui/core';
+import clsx from 'clsx';
+import { useStyles } from '../../util/styles';
 
 interface Props {
   signIn: Routine;
-  userState: UserState;
+  userState: GeneralState | undefined;
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%',
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
-const SignIn: React.FC<Props> = ({ signIn, userState }) => {
+export const SignIn: React.FC<Props> = ({ signIn, userState }) => {
   const classes = useStyles();
-
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [role, setRole] = useState<string>('');
+  const buttonClassname = clsx({
+    [classes.buttonSuccess]: userState?.data ? true : false,
+    [classes.buttonFailure]: userState?.error ? true : false,
+  });
 
   const onSubmit = () => {
-    signIn({ email, password, role: role ? role : 'PATIENT' });
+    signIn({ email, password });
   };
 
   return (
@@ -51,7 +28,7 @@ const SignIn: React.FC<Props> = ({ signIn, userState }) => {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <form className={classes.form} noValidate>
+      <form className={classes.form}>
         <TextField
           variant="outlined"
           margin="normal"
@@ -76,29 +53,21 @@ const SignIn: React.FC<Props> = ({ signIn, userState }) => {
           autoComplete="current-password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Select
-          defaultValue="Patient"
-          style={{ width: '100%' }}
-          onChange={(roleSelected: string) => setRole(roleSelected)}
-          size="large"
-        >
-          <Option value="PATIENT">Patient</Option>
-          <Option value="DOCTOR">Doctor</Option>
-          <Option value="RECEPTIONIST">Receptionist</Option>
-        </Select>
         <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-        <Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={onSubmit}>
-          Sign In
-        </Button>
+        <div className={classes.wrapper}>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            className={buttonClassname}
+            disabled={userState?.pending}
+            onClick={onSubmit}
+          >
+            Sign in
+          </Button>
+          {userState?.pending && <CircularProgress size={24} className={classes.buttonProgress} />}
+        </div>
       </form>
     </>
   );
 };
-
-const mapStateToProps = (state: RootState) => ({ userState: signIn.getUserState(state) });
-
-const mapDispatchToProps = {
-  signIn: actions.signIn.signIn,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

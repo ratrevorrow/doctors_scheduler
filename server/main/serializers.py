@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Appointment, User
 from django.contrib.auth import authenticate
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -17,6 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
 
+
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
@@ -26,7 +28,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField()
     password = serializers.CharField()
-    role = serializers.CharField()
+
     def validate(self, data):
         user = authenticate(**data)
         if user and user.is_active:

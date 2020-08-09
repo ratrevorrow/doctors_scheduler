@@ -39,11 +39,17 @@ def get_times_available_for_date(pk, date):
     __init_time_slots()
     date = datetime.datetime.strptime(date, '%Y-%m-%d')
     items = get_items(Appointment.objects.filter(date__date=date))
+    # time_slots.append({f'0{i}:00:00': 3})
     for item in items:
         date_time = datetime.datetime.strptime(
             item['fields']['date'], DATE_FORMAT_1)
         time_slots[str(date_time.time())] -= 1
-    return time_slots
+    slots = []
+    for k, v in time_slots.items():
+        if v > 0:
+            slots.append(k)
+    print(len(slots))
+    return slots
 
 ####################### POST #######################
 
@@ -109,8 +115,6 @@ def __init_time_slots():
         time_slots[f'{i}:15:00'] = 3
         time_slots[f'{i}:30:00'] = 3
         time_slots[f'{i}:45:00'] = 3
-
-    time_slots['17:00:00'] = 3
 
 ####################### PUBLIC HELPER FUNCTIONS #######################
 

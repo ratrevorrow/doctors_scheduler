@@ -1,26 +1,27 @@
-import React from 'react';
-import { Route, Switch, RouteComponentProps, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { RootState } from '../../store/models';
-import { UserInformation } from '../../store/signin/models';
+import React, { useEffect } from 'react';
+import { Route, Switch, RouteComponentProps } from 'react-router-dom';
+import { UserInformation } from '../../store/user/models';
 import Navbar from '../Navbar';
-import Login from '../../pages/login';
-import CreateUser from '../../pages/createuser';
-import Home from '../../pages/home';
-import Scheduler from '../../pages/scheduler';
-import { signIn } from '../../store/selectors';
+import Login from '../../pages/Login';
+import CreateUser from '../../pages/CreateUser';
+import Home from '../../pages/Home';
+import Scheduler from '../../pages/Scheduler';
 
 interface Props {
-  userInformation: UserInformation | undefined;
+  userInformation: UserInformation | undefined | string;
   hasSetPassword: boolean | undefined;
 }
 
-const Routes: React.FC<RouteComponentProps & Props> = ({ userInformation, hasSetPassword, history, location }) => {
+export const Routes: React.FC<RouteComponentProps & Props> = ({
+  userInformation,
+  hasSetPassword,
+  history,
+  location,
+}) => {
   // useEffect(() => {
   //   if (!hasSetPassword) history.push('/login');
   //   else history.push('/');
   // }, [history, userInformation, hasSetPassword]);
-
   return (
     <>
       {!location.pathname.includes('login') && <Navbar />}
@@ -33,10 +34,3 @@ const Routes: React.FC<RouteComponentProps & Props> = ({ userInformation, hasSet
     </>
   );
 };
-
-const mapStateToProps = (state: RootState) => ({
-  userInformation: signIn.getUserInformation(state),
-  hasSetPassword: signIn.getHasSetPassword(state),
-});
-
-export default withRouter(connect(mapStateToProps)(Routes));

@@ -1,5 +1,3 @@
-import * as signInSelectors from './signin/selectors';
-import * as signUpSelectors from './signup/selectors';
+import * as userSelectors from './user/selectors';
 
-export { signInSelectors as signIn };
-export { signUpSelectors as signUp };
+export { userSelectors as user };

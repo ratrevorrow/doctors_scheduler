@@ -1,73 +1,32 @@
 import React from 'react';
-import { signIn } from '../../store/selectors';
-import { RootState } from '../../store/models';
 import ResetPassword from '../../components/ResetPassword';
 import SignIn from '../../components/SignIn';
-import { Avatar, CssBaseline, Link, Box, Typography, Container, makeStyles } from '@material-ui/core';
-import { green, red } from '@material-ui/core/colors';
-import { connect } from 'react-redux';
+import { Avatar, CssBaseline, Link, Box, Typography, Container } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
+import { GeneralState } from '../../store/user/models';
+import clsx from 'clsx';
+import { useStyles } from '../../util/styles';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit">Richard Trevorrow</Link> {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+interface Props {
+  userState: GeneralState | undefined;
+  hasSetPassword: boolean | undefined;
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  buttonSuccess: {
-    backgroundColor: green[500],
-    '&:hover': {
-      backgroundColor: green[700],
-    },
-  },
-  buttonFailure: {
-    backgroundColor: red[500],
-    '&:hover': {
-      backgroundColor: red[700],
-    },
-  },
-  wrapper: {
-    margin: theme.spacing(3, 0, 2),
-    position: 'relative',
-  },
-  buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-}));
-
-const Login: React.FC<{ hasSetPassword: boolean | undefined }> = ({ hasSetPassword }) => {
+export const Login: React.FC<Props> = ({ hasSetPassword, userState }) => {
   const classes = useStyles();
   // const [toggleSign, setToggleSign] = useState<boolean>(false);
+  const buttonClassname = clsx({
+    [classes.buttonSuccess]: userState?.data ? true : false,
+    [classes.buttonFailure]: userState?.error ? true : false,
+    [classes.avatar]: true,
+  });
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlined />
+        <Avatar className={buttonClassname}>
+          <LockOutlined color="primary" />
         </Avatar>
 
         {/* RENDER SIGN IN / UP */}
@@ -85,14 +44,12 @@ const Login: React.FC<{ hasSetPassword: boolean | undefined }> = ({ hasSetPasswo
         {/* </Grid> */}
       </div>
       <Box mt={5}>
-        <Copyright />
+        <Typography variant="body2" color="textSecondary" align="center">
+          {'Copyright © '}
+          <Link color="inherit">Richard Trevorrow</Link> {new Date().getFullYear()}
+          {'.'}
+        </Typography>
       </Box>
     </Container>
   );
 };
-
-const mapStateToProps = (state: RootState) => ({ hasSetPassword: signIn.getHasSetPassword(state) });
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);

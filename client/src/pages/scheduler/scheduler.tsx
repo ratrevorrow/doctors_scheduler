@@ -1,42 +1,40 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { RootState } from '../../store/models';
-import { UserState } from '../../store/signin/models';
+import { GeneralState } from '../../store/user/models';
 import { RouteComponentProps } from 'react-router-dom';
 import { Form, Button, Calendar, Select, Radio } from 'antd';
 import moment from 'moment';
 import { getProtocol } from '../../util/api';
-
 import './scheduler.scss';
 
 interface Props extends RouteComponentProps {
-  userState: UserState;
+  userState: GeneralState | undefined;
 }
 
-const Scheduler: React.FC<Props> = () => {
+const URI_TIMES = 'http://127.0.0.1:8000/api/doctors/1/times/';
+
+export const Scheduler: React.FC<Props> = () => {
   const [date, setDate] = useState<moment.Moment | null>(null);
+  const [times, setTimes] = useState<Array<string>>([]);
 
   const onFinish = (values) => {
-    getProtocol('http://127.0.0.1:8000/api/doctors/1/times/' + date?.format('YYYY-MM-DD')).then((res) =>
-      console.log(res),
-    );
-    console.log(date?.format('YYYY-MM-DD'));
+    console.log(values);
   };
 
-  function onPanelChange(value, mode) {
-    console.log(value, mode);
-  }
+  const getTimes = (date) => {
+    const DATE: string = date ? date.format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+    getProtocol(URI_TIMES + DATE).then((res) => setTimes(res));
+  };
 
   return (
     <div className="center-container">
       <div className="patient-form">
         <Form labelCol={{ span: 4 }} layout="horizontal" style={{ width: '100%' }} onFinish={onFinish}>
-          <Form.Item label="Date Picker" name="date">
+          <Form.Item label="Choose Date">
             <div className="site-calendar-demo-card">
-              <Calendar fullscreen={false} onPanelChange={onPanelChange} onSelect={setDate} />
+              <Calendar fullscreen={false} onPanelChange={(v) => setDate(v)} onSelect={(d) => getTimes(d)} />
             </div>
           </Form.Item>
-          <Form.Item label="kind" name="kind">
+          <Form.Item label="Type" name="kind">
             <Radio.Group style={{ width: '100%' }}>
               <Radio.Button style={{ width: '50%' }} value="N">
                 New Patient
@@ -46,11 +44,17 @@ const Scheduler: React.FC<Props> = () => {
               </Radio.Button>
             </Radio.Group>
           </Form.Item>
-          <Form.Item label="Time">
-            <Select>
-              <Select.Option value="demo">Demo</Select.Option>
-            </Select>
-          </Form.Item>
+          {times.length > 0 && (
+            <Form.Item label="Time" name="time">
+              <Select>
+                {times.map((time) => (
+                  <Select.Option key={time} value={time}>
+                    {time}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
           <Form.Item wrapperCol={{ offset: 12 }}>
             <Button type="primary" htmlType="submit">
               Submit
@@ -61,7 +65,3 @@ const Scheduler: React.FC<Props> = () => {
     </div>
   );
 };
-
-const mapStateToProps = (state: RootState) => ({ userState: { ...state.signin } });
-
-export default connect(mapStateToProps)(Scheduler);
