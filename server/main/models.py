@@ -24,6 +24,9 @@ class User(AbstractUser):
 
     def set_has_changed_password(self, option):
         self.has_set_password = option
+    
+    def get_email(self):
+        return self.email
 
 
 class Appointment(models.Model):
