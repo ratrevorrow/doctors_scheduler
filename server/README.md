@@ -8,7 +8,7 @@ Specifications: This app uses Python 3.7 and PostgreSQL.
 2. Install dependencies with `pip install -r requirements.txt`
 3. Run `python manage.py makemigrations` and `python manage.py migrate` to setup the database.
 4. Start application with the command `python manage.py runserver`. This will start a server on port 8000.
-    If you want to use a different port, start the server with this command: `python manage.py runserver <PORT NUMBER>`.
+    If you want to use a different port, start the server with this command: `python manage.py runserver 0.0.0.0:<PORT NUMBER>`.
 
 ## Endpoints
 
