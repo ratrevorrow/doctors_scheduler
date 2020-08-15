@@ -1,7 +1,5 @@
 # Doctor's scheduler
 
-This is a full-stack application that uses React, Django, and PostgreSQL.
-
 The system has three types of roles
 
 1. Doctor
