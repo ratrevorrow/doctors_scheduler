@@ -1,73 +1,60 @@
 import React, { useState } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { Menu, Dropdown } from 'antd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { postProtocol } from '../../util/api';
-
-import './navbar.scss';
-
-type Pages = {
-  home: Page;
-  scheduler: Page;
-  createuser: Page;
-};
 
 type Page = {
+  name: string;
   url: string;
   key: string;
+  show: boolean;
 };
 
-const pages: Pages = {
-  home: { url: '/', key: 'dashboard' },
-  scheduler: { url: '/scheduler', key: 'scheduler' },
-  createuser: { url: '/createuser', key: 'createuser' },
-};
+const RECEPTIONIST = 'RECEPTIONIST';
 
-const roles = {
-  PATIENT: 'PATIENT',
-  DOCTOR: 'DOCTOR',
-  RECEPTIONIST: 'RECEPTIONIST',
-};
-
-const Navbar: React.FC<RouteComponentProps> = ({ history, location }) => {
+export const Navbar: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [current, setCurrent] = useState<string>(location.pathname.replace(/\//, '') || 'dashboard');
+  const role = JSON.parse(localStorage.getItem('role') || '');
+  const pages: Array<Page> = [
+    { name: 'Dashboard', url: '/', key: 'dashboard', show: true },
+    { name: 'Scheduler', url: '/scheduler', key: 'scheduler', show: true },
+    { name: 'Createuser', url: '/createuser', key: 'createuser', show: role === RECEPTIONIST },
+  ];
+
   const handleClick = (page: Page) => {
     history.push(page.url);
     setCurrent(page.key);
   };
-  const role = JSON.parse(localStorage.getItem('role') || '');
+
   const logout = () => {
     localStorage.setItem('token', '');
-    postProtocol('http://localhost:8000/api/logout', {}).then((res) => console.log(res));
     history.push('/login');
   };
-  const menu: JSX.Element = (
-    <Menu>
-      <Menu.Item>Account</Menu.Item>
-      <Menu.Item onClick={logout}>Logout</Menu.Item>
-    </Menu>
-  );
 
   return (
     <>
       <Menu selectedKeys={[current]} mode="horizontal" theme="dark">
-        <Menu.Item onClick={() => handleClick(pages.home)} key="dashboard">
-          Dashboard
-        </Menu.Item>
-        <Menu.Item onClick={() => handleClick(pages.scheduler)} key="scheduler">
-          Scheduler
-        </Menu.Item>
-        {role === roles.RECEPTIONIST && (
-          <Menu.Item onClick={() => handleClick(pages.createuser)} key="createuser">
-            Create User
-          </Menu.Item>
+        {pages.map(
+          (page: Page) =>
+            page.show && (
+              <Menu.Item onClick={() => handleClick(page)} key={page.key}>
+                {page.name}
+              </Menu.Item>
+            ),
         )}
         <div className="logout">
-          <Dropdown.Button size="large" overlay={menu} icon={<AccountCircleIcon fontSize="default" />} />
+          <Dropdown.Button
+            size="large"
+            overlay={
+              <Menu>
+                <Menu.Item>Account</Menu.Item>
+                <Menu.Item onClick={logout}>Logout</Menu.Item>
+              </Menu>
+            }
+            icon={<AccountCircleIcon fontSize="default" />}
+          />
         </div>
       </Menu>
     </>
   );
 };
-
-export default withRouter(Navbar);

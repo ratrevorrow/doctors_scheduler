@@ -45,14 +45,15 @@ const pending = (state: State, { type }: Action<State>) => ({
 
 export default handleActions<State, any>(
   {
-    [signIn.TRIGGER ||
-    signIn.REQUEST ||
-    createUser.TRIGGER ||
-    createUser.REQUEST ||
-    resetPassword.TRIGGER ||
-    resetPassword.REQUEST]: pending,
-    [signIn.SUCCESS || createUser.SUCCESS || resetPassword.SUCCESS]: success,
-    [signIn.FAILURE || createUser.FAILURE || resetPassword.FAILURE]: error,
+    [signIn.TRIGGER]: pending,
+    [createUser.TRIGGER]: pending,
+    [resetPassword.TRIGGER]: pending,
+    [signIn.SUCCESS]: success,
+    [createUser.SUCCESS]: success,
+    [resetPassword.SUCCESS]: success,
+    [signIn.FAILURE]: error,
+    [createUser.FAILURE]: error,
+    [resetPassword.FAILURE]: error,
   },
   initialState,
 );

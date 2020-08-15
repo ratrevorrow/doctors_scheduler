@@ -85,20 +85,19 @@ def login(request):
     data = JSONParser().parse(request)
     try:
         user = User.objects.get(email=data['email'])
-        load_user = User.objects.filter(email=data['email']).values(
-            'id', 'email', 'role', 'first_name', 'last_name', 'has_set_password')[0]
     except:
         return Response("You haven't been added to the system yet. Call the office to get started.", status=HTTP_404_NOT_FOUND)
-        
+    load_user = User.objects.filter(email=data['email']).values(
+            'id', 'email', 'role', 'first_name', 'last_name', 'has_set_password')[0]
     if not load_user['has_set_password']:
         return Response({'user': load_user}, status=HTTP_200_OK)
 
-    serialize_user = LoginSerializer(data=data)
-    if serialize_user.is_valid():
+    serialize_login_user = LoginSerializer(data=data)
+    if serialize_login_user.is_valid():
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key, 'user': user}, status=HTTP_200_OK)
+        return Response({'token': token.key, 'user': load_user}, status=HTTP_200_OK)
     else:
-        print(serialize_user.errors)
+        print(serialize_login_user.errors)
         return Response('Incorrect Credentials', status=HTTP_404_NOT_FOUND)
 
 

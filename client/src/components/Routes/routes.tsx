@@ -18,10 +18,10 @@ export const Routes: React.FC<RouteComponentProps & Props> = ({
   history,
   location,
 }) => {
-  // useEffect(() => {
-  //   if (!hasSetPassword) history.push('/login');
-  //   else history.push('/');
-  // }, [history, userInformation, hasSetPassword]);
+  useEffect(() => {
+    if (!hasSetPassword) history.push('/login');
+    else history.push('/');
+  }, [history, userInformation, hasSetPassword]);
   return (
     <>
       {!location.pathname.includes('login') && <Navbar />}

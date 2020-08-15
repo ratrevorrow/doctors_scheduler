@@ -4,6 +4,8 @@ import * as actions from '../../store/actions';
 import { user } from '../../store/selectors';
 import { Home } from './home';
 
+import './home.scss';
+
 const mapStateToProps = (state: RootState) => ({ user: user.getUser(state) });
 
 const mapDispatchToProps = {

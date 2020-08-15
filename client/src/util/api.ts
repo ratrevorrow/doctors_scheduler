@@ -18,8 +18,6 @@ function handleResponse(response: Response) {
 
 const getAuthorization = (): Record<string, string> => {
   const token: string = localStorage.getItem('token') || '';
-  // const isToken = localStorage.getItem('token') ? true : false;
-  // const token: string | null = JSON.parse(isToken ? localStorage.getItem('token') : '');
   return token ? { Authorization: 'Token ' + token } : {};
 };
 

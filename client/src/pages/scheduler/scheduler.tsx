@@ -13,7 +13,6 @@ interface Props extends RouteComponentProps {
 const URI_TIMES = 'http://127.0.0.1:8000/api/doctors/1/times/';
 
 export const Scheduler: React.FC<Props> = () => {
-  const [date, setDate] = useState<moment.Moment | null>(null);
   const [times, setTimes] = useState<Array<string>>([]);
 
   const onFinish = (values) => {
@@ -31,7 +30,7 @@ export const Scheduler: React.FC<Props> = () => {
         <Form labelCol={{ span: 4 }} layout="horizontal" style={{ width: '100%' }} onFinish={onFinish}>
           <Form.Item label="Choose Date">
             <div className="site-calendar-demo-card">
-              <Calendar fullscreen={false} onPanelChange={(v) => setDate(v)} onSelect={(d) => getTimes(d)} />
+              <Calendar fullscreen={false} onSelect={(d) => getTimes(d)} />
             </div>
           </Form.Item>
           <Form.Item label="Type" name="kind">

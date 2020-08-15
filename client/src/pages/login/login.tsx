@@ -14,7 +14,6 @@ interface Props {
 
 export const Login: React.FC<Props> = ({ hasSetPassword, userState }) => {
   const classes = useStyles();
-  // const [toggleSign, setToggleSign] = useState<boolean>(false);
   const buttonClassname = clsx({
     [classes.buttonSuccess]: userState?.data ? true : false,
     [classes.buttonFailure]: userState?.error ? true : false,
@@ -32,16 +31,11 @@ export const Login: React.FC<Props> = ({ hasSetPassword, userState }) => {
         {/* RENDER SIGN IN / UP */}
         {hasSetPassword !== undefined && !hasSetPassword ? <ResetPassword /> : <SignIn />}
 
-        {/* <Grid container>
+        {/* 
           <Grid item xs>
             <Link variant="body2">Forgot password?</Link>
-          </Grid> */}
-        {/* <Grid item>
-            <Link style={{ cursor: 'pointer' }} onClick={() => setToggleSign(!toggleSign)} variant="body2">
-              {toggleSign ? 'Already have an account? Sign in' : "Don't have an account? Sign Up"}
-            </Link>
-          </Grid> */}
-        {/* </Grid> */}
+          </Grid> 
+        */}
       </div>
       <Box mt={5}>
         <Typography variant="body2" color="textSecondary" align="center">

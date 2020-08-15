@@ -8,8 +8,8 @@ export const getSignInState = (state: RootState): GeneralState | undefined => ge
 export const getCreateUserState = (state: RootState): GeneralState | undefined => getUserState(state).createuser;
 export const getResetPasswordState = (state: RootState): GeneralState | undefined => getUserState(state).resetpassword;
 
-// getUserState
-export const getUserInformation = (state: RootState): UserInformation | undefined => getUserState(state)?.signin?.data;
+// getSignInState
+export const getUserInformation = (state: RootState): UserInformation | undefined => getSignInState(state)?.data;
 
 // getUserInformation
 export const getToken = (state: RootState): string | undefined => getUserInformation(state)?.token;
