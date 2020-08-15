@@ -1,18 +1,38 @@
-# Steps to run application
+# Backend server uses python and django
 
-This app uses Python3, PostgreSQL.
+## Steps to install and run application
 
-1. Next, run `source env/bin/activate` to activate the environment.
-2. install dependencies with `pip install -r requirements.txt`
-3. You may need to run `python manage.py makemigrations` and `python manage.py migrate` depending on your installed/configured machine.
-4. run application with `python manage.py runserver` to start on port 8000 by default, or `python manage.py runserver 5000` to choose port 5000.
+Specifications: This app uses Python 3.7 and PostgreSQL.
 
-You can access endpoints at:
+1. Run `source venv/bin/activate` to activate the python environment.
+2. Install dependencies with `pip install -r requirements.txt`
+3. Run `python manage.py makemigrations` and `python manage.py migrate` to setup the database.
+4. Start application with the command `python manage.py runserver`. This will start a server on port 8000.
+    If you want to use a different port, start the server with this command: `python manage.py runserver <PORT NUMBER>`.
 
-- `localhost:8000/api/doctors` (GET)
-- `localhost:8000/api/appointments` (GET)
-- `localhost:8000/api/doctors/<int:pk>/appointments` (GET)
-- `localhost:8000/api/doctors/<int:pk>/times/available` (GET)
-- `localhost:8000/api/doctors/<int:pk>/appointment` (POST)
-- `localhost:8000/api/doctors` (POST)
-- `localhost:8000/api/doctors/<int:pk>/appointment` (DELETE)
+## Endpoints
+
+The base url will be: `localhost:8000`.
+All endpoints are prefaced with `/api` .
+
+### GET REQUESTS
+
+- `/doctors`
+- `/patients`
+- `/users`
+- `/appointments`
+- `/doctors/:id/appointments`
+- `/doctors/:id/times/:selected_date`
+
+### POST REQUESTS
+
+- `/doctors`
+- `/createuser`
+- `/login`
+- `/doctors/:id/appointment`
+
+### DELETE REQUESTS
+
+- `/doctors/:id/appointment`
+
+The final URI will be something like `http://localhost:8000/api/doctors`.
