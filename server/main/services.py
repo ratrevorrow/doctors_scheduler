@@ -87,6 +87,7 @@ def add_user(user):
 def delete_appt(pk):
     try:
         Appointment.objects.get(id=pk).delete()
+        print('Deleted appointment')
         return True
     except:
         return False

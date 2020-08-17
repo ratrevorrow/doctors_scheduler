@@ -2,13 +2,14 @@ import { takeLatest, put, call, all } from 'redux-saga/effects';
 import { Action } from 'redux-actions';
 import { UserInformation } from './models';
 import * as actions from './actions';
-
 import { postProtocol } from '../../util/api';
 
+const BASE = 'http://127.0.0.1:8000/api';
+
 const URI = {
-  LOGIN: 'http://127.0.0.1:8000/api/login',
-  CREATEUSER: 'http://127.0.0.1:8000/api/createuser',
-  RESETPASSWORD: 'http://127.0.0.1:8000/api/patients',
+  LOGIN: `${BASE}/login`,
+  CREATEUSER: `${BASE}/users`,
+  RESETPASSWORD: `${BASE}/resetPassword`,
 };
 
 export function* signIn(action?: Action<string>) {

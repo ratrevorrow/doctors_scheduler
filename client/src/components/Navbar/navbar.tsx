@@ -18,7 +18,7 @@ export const Navbar: React.FC<RouteComponentProps> = ({ history, location }) => 
   const pages: Array<Page> = [
     { name: 'Dashboard', url: '/', key: 'dashboard', show: true },
     { name: 'Scheduler', url: '/scheduler', key: 'scheduler', show: true },
-    { name: 'Createuser', url: '/createuser', key: 'createuser', show: role === RECEPTIONIST },
+    { name: 'Create User', url: '/createuser', key: 'createuser', show: role === RECEPTIONIST },
   ];
 
   const handleClick = (page: Page) => {

@@ -27,13 +27,14 @@ export const Home: React.FC<{ user: User | undefined }> = ({ user }) => {
   });
 
   useEffect(() => {
-    getProtocol('http://localhost:8000/api/users').then((res) =>
-      setState({
-        ...state,
-        data: res,
-      }),
-    );
-  }, []);
+    user &&
+      getProtocol('http://localhost:8000/api/users').then((res) =>
+        setState({
+          ...state,
+          data: res,
+        }),
+      );
+  }, [user]);
 
   return (
     <div className="center-container">
