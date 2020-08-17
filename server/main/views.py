@@ -158,6 +158,7 @@ def appointments(request, pk = None):
 
     if request.method == 'POST':
         data = JSONParser().parse(request)
+        data['doctor'] = pk
         if is_fully_booked(data):
             return Response(f"There are 3 appointments for this time slot already", HTTP_400_BAD_REQUEST)
         elif is_patient_booked_already(data):
@@ -165,7 +166,7 @@ def appointments(request, pk = None):
         elif not is_increment_of_fifteen(data):
             return Response("Times have to be in 15 minute increments", HTTP_400_BAD_REQUEST)
 
-        if add_appt(data):
+        if add_appt(data, pk):
             return Response(status=HTTP_201_CREATED)
         return Response("Failed to add appointment", HTTP_400_BAD_REQUEST)
 

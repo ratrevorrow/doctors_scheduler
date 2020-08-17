@@ -58,7 +58,7 @@ def get_times_available_for_date(pk, date):
 ####################### POST #######################
 
 
-def add_appt(new_appt):
+def add_appt(new_appt, pk):
     new_appt['date'] = datetime.datetime.strptime(
         new_appt['date'], DATE_FORMAT_2)
     new_appt['date'].astimezone(tz=pytz.UTC)
@@ -125,8 +125,8 @@ def __init_time_slots():
 
 
 def is_fully_booked(new_appt):
-    length = len(get_items(Appointment.objects.filter(
-        doctor=new_appt['doctor'], date=new_appt['date'])))
+    length = Appointment.objects.filter(
+        doctor=new_appt['doctor'], date=new_appt['date']).count()
     if length >= 3:
         return True
     return False
